@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ru" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Бот - Пермский финансово-экономический колледж</title>
+    <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 2rem;
+        }
+        .status-badge {
+            font-size: 1.2rem;
+        }
+        .bot-info {
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2">
+                <div class="card">
+                    <div class="card-header">
+                        <h1 class="text-center">Телеграм-бот</h1>
+                        <h3 class="text-center">Пермский финансово-экономический колледж</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center mb-4">
+                            <span id="status-badge" class="badge bg-secondary status-badge">Проверка статуса...</span>
+                        </div>
+                        
+                        <div class="bot-info">
+                            <h4>О боте</h4>
+                            <p>Этот бот разработан для студентов Пермского финансово-экономического колледжа.</p>
+                            <p>Бот предоставляет информацию о:</p>
+                            <ul>
+                                <li>Расписании занятий</li>
+                                <li>Преподавателях</li>
+                                <li>Мероприятиях</li>
+                                <li>Спортивных секциях</li>
+                                <li>Общежитиях</li>
+                                <li>Навигации по колледжу</li>
+                                <li>Часто задаваемых вопросах</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <h4>Как начать использовать бота</h4>
+                            <p>Найдите бота в Telegram и отправьте команду <code>/start</code>.</p>
+                        </div>
+                    </div>
+                    <div class="card-footer text-center">
+                        <p>©️ 2025 Пермский финансово-экономический колледж</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Проверяем статус бота каждые 30 секунд
+        function checkBotStatus() {
+            fetch('/api/status')
+                .then(response => response.json())
+                .then(data => {
+                    const statusBadge = document.getElementById('status-badge');
+                    if (data.status === 'running') {
+                        statusBadge.className = 'badge bg-success status-badge';
+                        statusBadge.textContent = 'Активен';
+                    } else {
+                        statusBadge.className = 'badge bg-danger status-badge';
+                        statusBadge.textContent = 'Не активен';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error checking bot status:', error);
+                    const statusBadge = document.getElementById('status-badge');
+                    statusBadge.className = 'badge bg-danger status-badge';
+                    statusBadge.textContent = 'Ошибка проверки статуса';
+                });
+        }
+        
+        // Проверяем статус сразу при загрузке страницы
+        checkBotStatus();
+        
+        // Периодическая проверка статуса
+        setInterval(checkBotStatus, 30000);
+    </script>
+</body>
+</html>
